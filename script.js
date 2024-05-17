@@ -23,8 +23,34 @@ var ball_move = { x:20 , y:20 };
 var x_speed = 3;
 var y_speed = 1;
 
-//ball collide
+// ~~~PADDLE~~~
+//size of paddles
+const paddle_width =5;
+const paddle_height = 30;
+const paddle_offset = 10;
+// paddle offset from top of canvas
+var left_paddle_top = 30;
+var right_paddle_top = 30;
 
+// ~~~Score~~~
+
+//left and right score variables
+var left_score = 0;
+var right_score = 0;
+
+function draw_score() {
+    //draw score
+    ctx.font = "30px monospace";
+    ctx.textAlign ="left";
+    ctx.fillText(left_score.toString(),50,50);
+    ctx.textAlign ="right";
+    ctx.fillText(right_score.toString(),width - 50,50);
+}
+
+
+// ~~~Gameplay~~~
+// collisions
+//ball collisions
 function ball_collide() {
     //creates local object that indicates the location of the sides of the ball
     var ball = { 
@@ -57,9 +83,30 @@ function ball_collide() {
     if (ball.top <0 || ball.bottom > height) {
         y_speed = -y_speed;//reverse direction
     }
+    if (paddle_collide(ball,left_paddle)) {
+        let distance_from_top = ball.top - left_paddle_top;
+        let distance_from_bottom = left_paddle.bottom - ball.bottom;
+        adjust_angle(distance_from_top,distance_from_bottom);
+    }
+    if (paddle_collide(ball,right_paddle)) {
+        let distance_from_top1 = ball.top - left_paddle_top;
+        let distance_from_bottom1 = left_paddle.bottom - ball.bottom;
+        adjust_angle(distance_from_top1,distance_from_bottom1);
+    }
 
-    paddle_collide(ball,left_paddle);
-    paddle_collide(ball,right_paddle);
+
+
+    
+}
+
+function adjust_angle(distance_from_top2, distance_from_bottom2) {
+    if(distance_from_top2 < 0) {
+        //if ball hits near top of paddle, reduce y speed
+        y_speed -= 0.5;
+    }else if (distance_from_bottom2 < 0) {
+        //if ball hit near bottom of paddle, increase y speed
+        y_speed += 0.5;
+    };
 }
 
 
@@ -70,16 +117,6 @@ function paddle_collide(chk_ball,chk_paddle) {
     } 
 
 }
-
-
-// ~~~PADDLE~~~
-//size of paddles
-const paddle_width =5;
-const paddle_height=30;
-const paddle_offset = 10;
-// paddle offset from top of canvas
-var left_paddle_top = 30;
-var right_paddle_top = 30;
 
 //draws the current state of canvas
 function draw() {
@@ -93,6 +130,7 @@ function draw() {
     //draw/redraw paddles
     ctx.fillRect(paddle_offset,left_paddle_top,paddle_width,paddle_height);//left
     ctx.fillRect((width - paddle_offset - paddle_width),right_paddle_top,paddle_width,paddle_height);//right
+    draw_score();
 }
 //update the ball's current xy coordinate
 function update_ball() {
