@@ -39,7 +39,7 @@ const paddle_offset = 10;
 var left_paddle_top = 30;
 var right_paddle_top = 30;
 
-paddle_speed = 1.918;
+paddle_speed = 1.938;
 
 function track_ball() {
     //create condensed ball that is only the top and bottom
@@ -141,19 +141,14 @@ function ball_collide() {
         adjust_angle(distance_from_top,distance_from_bottom);
         x_speed = Math.abs(X_speed);
     }
-
-
-
-    
 }
-
 function adjust_angle(distance_from_top, distance_from_bottom) {
-    if(distance_from_top < 0) {
+    if(distance_from_top < 5) {
         //if ball hits near top of paddle, reduce y speed
-        y_speed -= 0.5;
-    }else if (distance_from_bottom < 0) {
+        y_speed -= 500;
+    }else if (distance_from_bottom < 5) {
         //if ball hit near bottom of paddle, increase y speed
-        y_speed += 0.5;
+        y_speed += 500;
     };
 }
 
