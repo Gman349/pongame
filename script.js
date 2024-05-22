@@ -2,6 +2,7 @@
 
 let canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
+const rickroll = document.getElementById("rickroll")
 
 //static variables
 
@@ -25,21 +26,22 @@ var y_speed;
 
 function init_ball() {
     ball_move = {x: 20 , y:10};
-    x_speed = 4;
-    y_speed = 2; 
+    x_speed = 5;
+    y_speed = 3; 
 }
 
 
 // ~~~PADDLE~~~
 //size of paddles
-const paddle_width = 5;
-const paddle_height = 30;
+const paddle_width = 6;
+const paddle_height = 50;
 const paddle_offset = 10;
 // paddle offset from top of canvas
 var left_paddle_top = 30;
 var right_paddle_top = 30;
 
-paddle_speed = 1.938;
+paddle_speed = 3;
+paddle_modifier = 1;
 
 function track_ball() {
     //create condensed ball that is only the top and bottom
@@ -54,10 +56,10 @@ function track_ball() {
     }
 
     if (ball.top < left_paddle.top) {
-        left_paddle_top -= paddle_speed;
+        left_paddle_top -= paddle_speed * Math.random()+ paddle_modifier ;
     }
     if (ball.bottom > left_paddle.bottom) {
-        left_paddle_top += paddle_speed;
+        left_paddle_top += paddle_speed * Math.random()+ paddle_modifier;
     }
 }
 
@@ -122,6 +124,12 @@ function ball_collide() {
 
         if (left_score == 10 || right_score == 10) {
             game_over = true;
+
+            if (left_score == 10) {
+                rickroll.style.visibility = "visible";
+                rickroll.load();
+                rickroll.play();
+            }
         }
 
     }
